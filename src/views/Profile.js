@@ -6,9 +6,9 @@ import Footer from "components/Footers/Footer.js";
 export default function Profile() {
   return (
     <>
-      <Navbar transparent />
+      {/* <Navbar transparent /> */}
       <main className="profile-page">
-        <section className="relative block h-500-px">
+        <section className="relative block h-350-px">
           <div
             className="absolute top-0 w-full h-full bg-center bg-cover"
             style={{
@@ -50,7 +50,7 @@ export default function Profile() {
                     <div className="relative">
                       <img
                         alt="..."
-                        src={require("assets/img/team-2-800x800.jpg").default}
+                        src={require("assets/img/team-2-800x800.jpg")}
                         className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
                       />
                     </div>
