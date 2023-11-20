@@ -16,6 +16,7 @@ import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import Index from "views/Index.js";
 import { Besoin } from "layouts/Besoin";
+import { Proforma } from "views/proforma/Proforma";
 
 ReactDOM.render(
   <BrowserRouter>
