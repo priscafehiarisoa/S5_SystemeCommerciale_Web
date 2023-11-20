@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,} from "react";
 import backendConfig from "config";
 import axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export const AjoutBesoin = ({ color }) => {
+  const history = useHistory();
   color = "light";
-const [articles, setArticles] = useState(
+  const [articles, setArticles] = useState(
     // []
     {
     "service": {
@@ -55,26 +57,31 @@ const [articles, setArticles] = useState(
 
   const handleQuantiteChange = (id, quantite) => {
     var oldBesoin= articles.besoinProduits
-    var newversion= {
-        quantite:quantite,
-        produit:{
-            id:id,
+    // var newversion= {
+    //     quantite:quantite,
+    //     produit:{
+    //         id:id,
+    //     }
+    // }
+    // oldBesoin.push(newversion);
+
+    const existingIndex = oldBesoin.findIndex(item => item.produit.id === id);
+
+    if (existingIndex !== -1) {
+      // If the id exists, update the quantite value
+      oldBesoin[existingIndex].quantite = quantite;
+    } else {
+      // If the id doesn't exist, add a new entry
+      const newVersion = {
+        quantite: quantite,
+        produit: {
+          id: id,
         }
+      };
+      oldBesoin.push(newVersion);
     }
-    oldBesoin.push(newversion);
     setArticles({...articles, besoinProduits:oldBesoin})
 
-    // setSelectedArticles((prevSelectedArticles) => {
-    //   const updatedArticles = prevSelectedArticles.map((item) =>
-    //   {
-    //     //   item.id === id ? { ...item, quantite: parseInt(quantite) || 0 } : item;
-    //     console.log(item.besoinProduits[0].produit.id);
-    // }
-    //   );
-    //   console.log("Updated Articles:", updatedArticles);
-    //   return updatedArticles;
-    // });
-    // console.log("Selected Articles:", selectedArticles);
 
   };
 
@@ -86,7 +93,7 @@ const [articles, setArticles] = useState(
     });
   };
 
-  const handleValidation = () => {
+  const handleValidation = async () => {
     // Merge the selected articles and quantities into the main articles state
     const updatedArticles = articles.besoinProduits.map((article) => {
       const selectedArticle = selectedArticles.find(
@@ -103,6 +110,10 @@ const [articles, setArticles] = useState(
     // Access the updated articles state
     console.log(articles);
     // You can perform further actions with the updated articles
+    const resp = await axios.post("http://localhost:8080/besoin",articles)
+    if(resp.status===200){
+      history.push(`/besoin/list`);
+    }
   };
 
 
