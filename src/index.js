@@ -17,6 +17,7 @@ import Profile from "views/Profile.js";
 import Index from "views/Index.js";
 import { Besoin } from "layouts/Besoin";
 import { Proforma } from "views/proforma/Proforma";
+import { Fournisseur } from "layouts/Fournisseur";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -25,12 +26,13 @@ ReactDOM.render(
       <Route path="/admin" component={Admin} />
       <Route path="/auth" component={Auth} />
       <Route path="/besoin" component={Besoin}/>
+      <Route path="/fournisseur" component={Fournisseur}/>
       {/* add routes without layouts */}
       <Route path="/landing" exact component={Landing} />
       <Route path="/profile" exact component={Profile} />
-      <Route path="/" exact component={Index} />
+      <Route path="/"  component={Auth} />
       {/* add redirect for first page */}
-      <Redirect from="*" to="/" />
+      <Redirect from="*" to="/auth/login" />
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

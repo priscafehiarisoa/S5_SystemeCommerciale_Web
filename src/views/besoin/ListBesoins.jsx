@@ -1,8 +1,230 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import backendConfig from "config";
+import axios from "axios";
 
 export const ListBesoins = ({ color }) => {
   color = "light";
+
+  const [listBesoins, setlistBesoins] = useState([]);
+  const link = `http://${backendConfig.host}:${backendConfig.port}`;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(link+"/besoin");
+
+        // console.log(response.data);
+        setlistBesoins(response.data);
+        // Handle the response data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle errors
+      }
+    };
+
+    fetchData();
+  }, []);
+// setlistBesoins([
+//     {
+//         "besoin": {
+//             "id": 11,
+//             "service": {
+//                 "id": 1,
+//                 "nomService": "IT"
+//             },
+//             "quantite": 0,
+//             "motif": "besoin service 1 ",
+//             "besoinProduits": null,
+//             "etat": 0
+//         },
+//         "listeBesoin": [
+//             {
+//                 "id": 11,
+//                 "quantite": 55,
+//                 "besoin": {
+//                     "id": 11,
+//                     "service": {
+//                         "id": 1,
+//                         "nomService": "IT"
+//                     },
+//                     "quantite": 0,
+//                     "motif": "besoin service 1 ",
+//                     "besoinProduits": null,
+//                     "etat": 0
+//                 },
+//                 "produit": {
+//                     "id": 1,
+//                     "nomProduit": "cache bouche",
+//                     "etat": 0
+//                 }
+//             },
+//             {
+//                 "id": 12,
+//                 "quantite": 34,
+//                 "besoin": {
+//                     "id": 11,
+//                     "service": {
+//                         "id": 1,
+//                         "nomService": "IT"
+//                     },
+//                     "quantite": 0,
+//                     "motif": "besoin service 1 ",
+//                     "besoinProduits": null,
+//                     "etat": 0
+//                 },
+//                 "produit": {
+//                     "id": 2,
+//                     "nomProduit": "gel desinfectant",
+//                     "etat": 0
+//                 }
+//             },
+//             {
+//                 "id": 13,
+//                 "quantite": 15,
+//                 "besoin": {
+//                     "id": 11,
+//                     "service": {
+//                         "id": 1,
+//                         "nomService": "IT"
+//                     },
+//                     "quantite": 0,
+//                     "motif": "besoin service 1 ",
+//                     "besoinProduits": null,
+//                     "etat": 0
+//                 },
+//                 "produit": {
+//                     "id": 3,
+//                     "nomProduit": "alcool",
+//                     "etat": 0
+//                 }
+//             }
+//         ]
+//     },
+//     {
+//         "besoin": {
+//             "id": 12,
+//             "service": {
+//                 "id": 1,
+//                 "nomService": "IT"
+//             },
+//             "quantite": 0,
+//             "motif": "test 4",
+//             "besoinProduits": null,
+//             "etat": 0
+//         },
+//         "listeBesoin": [
+//             {
+//                 "id": 14,
+//                 "quantite": 567,
+//                 "besoin": {
+//                     "id": 12,
+//                     "service": {
+//                         "id": 1,
+//                         "nomService": "IT"
+//                     },
+//                     "quantite": 0,
+//                     "motif": "test 4",
+//                     "besoinProduits": null,
+//                     "etat": 0
+//                 },
+//                 "produit": {
+//                     "id": 1,
+//                     "nomProduit": "cache bouche",
+//                     "etat": 0
+//                 }
+//             }
+//         ]
+//     },
+//     {
+//         "besoin": {
+//             "id": 13,
+//             "service": {
+//                 "id": 1,
+//                 "nomService": "IT"
+//             },
+//             "quantite": 0,
+//             "motif": "besoin service 55 ",
+//             "besoinProduits": null,
+//             "etat": 0
+//         },
+//         "listeBesoin": []
+//     },
+//     {
+//         "besoin": {
+//             "id": 14,
+//             "service": {
+//                 "id": 1,
+//                 "nomService": "IT"
+//             },
+//             "quantite": 0,
+//             "motif": "besoin service 55 ",
+//             "besoinProduits": null,
+//             "etat": 0
+//         },
+//         "listeBesoin": [
+//             {
+//                 "id": 15,
+//                 "quantite": 100,
+//                 "besoin": {
+//                     "id": 14,
+//                     "service": {
+//                         "id": 1,
+//                         "nomService": "IT"
+//                     },
+//                     "quantite": 0,
+//                     "motif": "besoin service 55 ",
+//                     "besoinProduits": null,
+//                     "etat": 0
+//                 },
+//                 "produit": {
+//                     "id": 1,
+//                     "nomProduit": "cache bouche",
+//                     "etat": 0
+//                 }
+//             },
+//             {
+//                 "id": 16,
+//                 "quantite": 400,
+//                 "besoin": {
+//                     "id": 14,
+//                     "service": {
+//                         "id": 1,
+//                         "nomService": "IT"
+//                     },
+//                     "quantite": 0,
+//                     "motif": "besoin service 55 ",
+//                     "besoinProduits": null,
+//                     "etat": 0
+//                 },
+//                 "produit": {
+//                     "id": 2,
+//                     "nomProduit": "gel desinfectant",
+//                     "etat": 0
+//                 }
+//             },
+//             {
+//                 "id": 17,
+//                 "quantite": 200,
+//                 "besoin": {
+//                     "id": 14,
+//                     "service": {
+//                         "id": 1,
+//                         "nomService": "IT"
+//                     },
+//                     "quantite": 0,
+//                     "motif": "besoin service 55 ",
+//                     "besoinProduits": null,
+//                     "etat": 0
+//                 },
+//                 "produit": {
+//                     "id": 3,
+//                     "nomProduit": "alcool",
+//                     "etat": 0
+//                 }
+//             }
+//         ]
+//     }
+// ])
   const besoins = [
     {
       idbesoin: 1,
@@ -34,6 +256,11 @@ export const ListBesoins = ({ color }) => {
     },
   ];
 
+  const storedUser = localStorage.getItem('user');
+  const user = JSON.parse(storedUser);
+  const filteredBesoins =user.poste === 'DG'
+    ? listBesoins.filter(besoin => besoin.besoin.etat === 0)
+    : listBesoins.filter(besoin => besoin.besoin.etat === 1);
   const [selectedIdBesoin, setSelectedIdBesoin] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -50,6 +277,7 @@ export const ListBesoins = ({ color }) => {
     console.log("first");
     history.push(`/besoin/proforma/${idbesoin}`);
   };
+//   console.log(JSON.stringify(listBesoins))
 
   return (
     <>
@@ -69,7 +297,7 @@ export const ListBesoins = ({ color }) => {
                     (color === "light" ? "text-blueGray-700" : "text-white")
                   }
                 >
-                  Liste des Besoins
+                    <span className="text-left"> Liste des Besoins</span>
                 </h3>
               </div>
             </div>
@@ -105,8 +333,8 @@ export const ListBesoins = ({ color }) => {
                 </tr>
               </thead>
               <tbody>
-                {besoins.map((besoin) => (
-                  <tr key={besoin.idbesoin}>
+                {filteredBesoins.map((besoin) => (
+                  <tr key={besoin.besoin.id}>
                     <th className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                       <span
                         className={
@@ -116,15 +344,15 @@ export const ListBesoins = ({ color }) => {
                             : "text-white")
                         }
                       >
-                        {besoin.idbesoin}
+                        {besoin.besoin.id}
                       </span>
                     </th>
                     <td>
                       {besoin.etat === 1
                         ? "Validé"
-                        : besoin.etat === 0
+                        : besoin.besoin.etat === 0
                         ? "En Attente"
-                        : besoin.etat === 2
+                        : besoin.besoin.etat === 2
                         ? "Refusé"
                         : "Inconnu"}
                     </td>
@@ -136,7 +364,19 @@ export const ListBesoins = ({ color }) => {
                       >
                         Articles
                       </button>
-                      {besoin.etat === 1 && (
+                      {besoin.besoin.etat === 1 && (
+                        <button
+                          className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                          type="button"
+                          onClick={() =>
+                            handleGenerateProforma(besoin.besoin.id)
+                          }
+                        >
+                          Generer Pro forma
+                        </button>
+                      )}
+
+                      {user.poste === "DG" && (
                         <button
                           className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
@@ -144,7 +384,7 @@ export const ListBesoins = ({ color }) => {
                             handleGenerateProforma(besoin.idbesoin)
                           }
                         >
-                          Generer Pro forma
+                          Valider
                         </button>
                       )}
 
@@ -190,11 +430,11 @@ export const ListBesoins = ({ color }) => {
                     </thead>
                     <tbody>
                       {besoins
-                        .find((besoin) => besoin.idbesoin === selectedIdBesoin)
-                        .articles.map((article) => (
-                          <tr key={article.idarticle} className=" text-center">
-                            <td>{article.idarticle}</td>
-                            <td>{article.nomarticle}</td>
+                        .find((besoin) => besoin.besoin.id === selectedIdBesoin)
+                        .listeBesoin.produits.map((article) => (
+                          <tr key={article.id} className=" text-center">
+                            <td>{article.id}</td>
+                            <td>{article.nomProduit}</td>
                           </tr>
                         ))}
                     </tbody>
@@ -219,3 +459,225 @@ export const ListBesoins = ({ color }) => {
     </>
   );
 };
+
+
+    //     [
+    //         {
+    //         "id": 11,
+    //         "service": {
+    //             "id": 1,
+    //             "nomService": "IT"
+    //         },
+    //         "motif": "besoin service 1 ",
+    //         "besoinProduits": [
+    //             {
+    //                 "id": 1,
+    //                 "nomProduit": "cache bouche",
+    //                 "quantite": 200
+    //             },
+    //             {
+    //                 "id": 2,
+    //                 "nomProduit": "Geln Main",
+    //                 "quantite": 20
+    //             },
+
+    //         ],
+    //         "etat": 0
+    //     },
+
+    //     {
+    //         "id": 12,
+    //         "service": {
+    //             "id": 2,
+    //             "nomService": "Finance"
+    //         },
+    //         "motif": "besoin service 1 ",
+    //         "besoinProduits": [
+    //             {
+    //                 "id": 1,
+    //                 "nomProduit": "cache bouche",
+    //                 "quantite": 200
+    //             },
+    //             {
+    //                 "id": 2,
+    //                 "nomProduit": "Geln Main",
+    //                 "quantite": 20
+    //             },
+
+    //         ],
+    //         "etat": 0
+    //     },
+
+
+    // ]
+
+
+
+    //     "listeBesoin": [
+
+    //         {
+    //             "id": 12,
+    //             "quantite": 34,
+    //             "besoin": {
+    //                 "id": 11,
+    //                 "service": {
+    //                     "id": 1,
+    //                     "nomService": "IT"
+    //                 },
+    //                 "quantite": 0,
+    //                 "motif": "besoin service 1 ",
+    //                 "besoinProduits": null,
+    //                 "etat": 0
+    //             },
+    //             "produit": {
+    //                 "id": 2,
+    //                 "nomProduit": "gel desinfectant",
+    //                 "etat": 0
+    //             }
+    //         },
+    //         {
+    //             "id": 13,
+    //             "quantite": 15,
+    //             "besoin": {
+    //                 "id": 11,
+    //                 "service": {
+    //                     "id": 1,
+    //                     "nomService": "IT"
+    //                 },
+    //                 "quantite": 0,
+    //                 "motif": "besoin service 1 ",
+    //                 "besoinProduits": null,
+    //                 "etat": 0
+    //             },
+    //             "produit": {
+    //                 "id": 3,
+    //                 "nomProduit": "alcool",
+    //                 "etat": 0
+    //             }
+    //         }
+    //     ]
+    // },
+    // {
+    //     "besoin": {
+    //         "id": 12,
+    //         "service": {
+    //             "id": 1,
+    //             "nomService": "IT"
+    //         },
+    //         "quantite": 0,
+    //         "motif": "test 4",
+    //         "besoinProduits": null,
+    //         "etat": 0
+    //     },
+    //     "listeBesoin": [
+    //         {
+    //             "id": 14,
+    //             "quantite": 567,
+    //             "besoin": {
+    //                 "id": 12,
+    //                 "service": {
+    //                     "id": 1,
+    //                     "nomService": "IT"
+    //                 },
+    //                 "quantite": 0,
+    //                 "motif": "test 4",
+    //                 "besoinProduits": null,
+    //                 "etat": 0
+    //             },
+    //             "produit": {
+    //                 "id": 1,
+    //                 "nomProduit": "cache bouche",
+    //                 "etat": 0
+    //             }
+    //         }
+    //     ]
+    // },
+    // {
+    //     "besoin": {
+    //         "id": 13,
+    //         "service": {
+    //             "id": 1,
+    //             "nomService": "IT"
+    //         },
+    //         "quantite": 0,
+    //         "motif": "besoin service 55 ",
+    //         "besoinProduits": null,
+    //         "etat": 0
+    //     },
+    //     "listeBesoin": []
+    // },
+    // {
+    //     "besoin": {
+    //         "id": 14,
+    //         "service": {
+    //             "id": 1,
+    //             "nomService": "IT"
+    //         },
+    //         "quantite": 0,
+    //         "motif": "besoin service 55 ",
+    //         "besoinProduits": null,
+    //         "etat": 0
+    //     },
+    //     "listeBesoin": [
+    //         {
+    //             "id": 15,
+    //             "quantite": 100,
+    //             "besoin": {
+    //                 "id": 14,
+    //                 "service": {
+    //                     "id": 1,
+    //                     "nomService": "IT"
+    //                 },
+    //                 "quantite": 0,
+    //                 "motif": "besoin service 55 ",
+    //                 "besoinProduits": null,
+    //                 "etat": 0
+    //             },
+    //             "produit": {
+    //                 "id": 1,
+    //                 "nomProduit": "cache bouche",
+    //                 "etat": 0
+    //             }
+    //         },
+    //         {
+    //             "id": 16,
+    //             "quantite": 400,
+    //             "besoin": {
+    //                 "id": 14,
+    //                 "service": {
+    //                     "id": 1,
+    //                     "nomService": "IT"
+    //                 },
+    //                 "quantite": 0,
+    //                 "motif": "besoin service 55 ",
+    //                 "besoinProduits": null,
+    //                 "etat": 0
+    //             },
+    //             "produit": {
+    //                 "id": 2,
+    //                 "nomProduit": "gel desinfectant",
+    //                 "etat": 0
+    //             }
+    //         },
+    //         {
+    //             "id": 17,
+    //             "quantite": 200,
+    //             "besoin": {
+    //                 "id": 14,
+    //                 "service": {
+    //                     "id": 1,
+    //                     "nomService": "IT"
+    //                 },
+    //                 "quantite": 0,
+    //                 "motif": "besoin service 55 ",
+    //                 "besoinProduits": null,
+    //                 "etat": 0
+    //             },
+    //             "produit": {
+    //                 "id": 3,
+    //                 "nomProduit": "alcool",
+    //                 "etat": 0
+    //             }
+    //         }
+    //     ]
+    // }

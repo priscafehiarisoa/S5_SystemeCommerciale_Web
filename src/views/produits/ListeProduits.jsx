@@ -1,0 +1,111 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+
+export const ListeProduits = () => {
+  const [produits, setproduits] = useState([]);
+  useEffect(() => {
+    const fetchData = () => {
+      setproduits([
+        {
+          id: 1,
+          nom_produit: "Macbook M3",
+          mesure: "unité",
+        },
+        {
+          id: 2,
+          nom_produit: "Gazoil",
+          mesure: "litre",
+        },
+        {
+          id: 3,
+          nom_produit: "Samsung Galaxy S21",
+          mesure: "unité",
+        },
+        {
+          id: 4,
+          nom_produit: "Stylo Bleus",
+          mesure: "piece",
+        },
+        {
+          id: 5,
+          nom_produit: "HP Spectre x360",
+          mesure: "unité",
+        },
+        {
+          id: 6,
+          nom_produit: "Papier Hygiénique",
+          mesure: "unité",
+        },
+      ]);
+    };
+    fetchData();
+  }, []);
+  return (
+    <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
+      <div class="bg-white p-8 rounded shadow-md w-96">
+        <div className="text-center flex justify-between">
+          <h6 className="text-blueGray-700 text-xl font-bold">
+            Liste des Produits
+          </h6>
+          <Link
+            type="submit"
+            class=" bg-emerald-500 text-white active:bg-emerald-600  font-bold uppercase text-sm px-4 py-2 rounded focus:outline-none focus:shadow-outline-indigo hover:bg-indigo-800"
+            to="/fournisseur/add"
+          >
+            Ajouter Produit
+          </Link>
+        </div>
+        <div className="block w-full overflow-x-auto p-4">
+          {/* Projects table */}
+          <table className="items-center w-full bg-transparent border-collapse">
+            <thead>
+              <tr>
+                {["ID", "Nom Produit","Unité de mesure", ""].map((col) => (
+                  <th
+                    className={
+                      "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                      "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                    }
+                  >
+                    {col}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {produits.map((p) => (
+                <tr key={p.id}>
+                  <th className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
+                    <span className={"ml-3 font-bold " + "text-blueGray-600"}>
+                      {p.id}
+                    </span>
+                  </th>
+                  <td className=" align-middle ">{p.nom_produit}</td>
+                  <td className=" align-middle ">{p.mesure}</td>
+                  <td>
+                    <button
+                      className="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      Modifier
+                    </button>
+
+                    <button
+                      className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      {" "}
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    //   </div>
+    // </div>
+  );
+};

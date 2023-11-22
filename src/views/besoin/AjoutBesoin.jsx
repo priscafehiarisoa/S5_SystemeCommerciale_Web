@@ -20,11 +20,11 @@ export const AjoutBesoin = ({ color }) => {
 
     const [selectedArticles, setSelectedArticles] = useState([]);
     const [produits, setproduits] = useState([])
+    const link = `http://${backendConfig.host}:${backendConfig.port}`;
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const link = `http://${backendConfig.host}:${backendConfig.port}/produit`;
-        const response = await axios.get(link);
+        const response = await axios.get(link+"/produit");
 
         setproduits(response.data);
         // Handle the response data
@@ -110,7 +110,7 @@ export const AjoutBesoin = ({ color }) => {
     // Access the updated articles state
     console.log(articles);
     // You can perform further actions with the updated articles
-    const resp = await axios.post("http://localhost:8080/besoin",articles)
+    const resp = await axios.post(link+"/besoin",articles)
     if(resp.status===200){
       history.push(`/besoin/list`);
     }
@@ -239,3 +239,4 @@ export const AjoutBesoin = ({ color }) => {
     </>
   );
 };
+
