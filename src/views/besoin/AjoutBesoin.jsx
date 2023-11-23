@@ -4,6 +4,8 @@ import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export const AjoutBesoin = ({ color }) => {
+  const storedUser = localStorage.getItem('user');
+  const user = JSON.parse(storedUser);
   const history = useHistory();
   color = "light";
   const [articles, setArticles] = useState(
@@ -19,14 +21,23 @@ export const AjoutBesoin = ({ color }) => {
   )
 
     const [selectedArticles, setSelectedArticles] = useState([]);
+    const [services, setservices] = useState([])
+    const [listesServices, setlistesServices] = useState([])
     const [produits, setproduits] = useState([])
     const link = `http://${backendConfig.host}:${backendConfig.port}`;
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(link+"/produit");
-
+        const response2 = await axios.get(link+"/service");
         setproduits(response.data);
+        setservices(response2.data);
+        if(user.idservice!==-1){
+            setlistesServices(services.filter(s=>s.id===user.idservice))
+        }
+        else{
+          setlistesServices(services)
+        }
         // Handle the response data
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -35,7 +46,7 @@ export const AjoutBesoin = ({ color }) => {
     };
 
     fetchData();
-  }, []);
+  }, [services,user]);
 
   const handleCheckboxChange = (id, checked) => {
     setSelectedArticles((prevSelectedArticles) => {
@@ -85,6 +96,8 @@ export const AjoutBesoin = ({ color }) => {
 
   };
 
+
+
   const handleMotifChange = (motif) => {
     // Update the motif in the main articles state
     setArticles({
@@ -117,6 +130,7 @@ export const AjoutBesoin = ({ color }) => {
   };
 
 
+
   return (
     <>
       <div className="w-full mb-12 px-4">
@@ -138,6 +152,15 @@ export const AjoutBesoin = ({ color }) => {
                   Liste des articles
                 </h3>
               </div>
+              <div className="mt-4">
+                  <select name="idservice" className="border-0 mt-2 px-3 py-3 placeholder-blueGray-300 text-blueGray-600" onChange={(e)=>setArticles({...articles, service:{id: e.target.value}})} >
+                  {listesServices.map(service =>(
+                    <option value={service.id}>{service.nomService}</option>
+                  ))}
+                  </select>
+              </div>
+              &nbsp; &nbsp;
+              <div className="mt-4">
               <input
                         type="text"
                         name="motif"
@@ -148,6 +171,7 @@ export const AjoutBesoin = ({ color }) => {
                             handleMotifChange( e.target.value)
                           }
                       />
+              </div>
             </div>
           </div>
           <div className="block w-full overflow-x-auto">

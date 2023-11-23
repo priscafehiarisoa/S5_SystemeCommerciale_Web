@@ -12,9 +12,10 @@ export const ListBesoins = ({ color }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(link+"/besoin");
-
-        // console.log(response.data);
-        setlistBesoins(response.data);
+          console.log(link+"/besoin")
+          console.log(response.data[0].etat);
+          setlistBesoins(response.data);
+          console.log(listBesoins);
         // Handle the response data
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -233,10 +234,13 @@ export const ListBesoins = ({ color }) => {
         {
           idarticle: 1,
           nomarticle: "Ordinateur Portable",
+          quantite: 3
         },
         {
           idarticle: 2,
           nomarticle: "Imprimante",
+          quantite: 3
+
         },
       ],
     },
@@ -247,10 +251,14 @@ export const ListBesoins = ({ color }) => {
         {
           idarticle: 3,
           nomarticle: "Écran LCD",
+          quantite: 3
+
         },
         {
           idarticle: 4,
           nomarticle: "Clavier sans fil",
+          quantite: 3
+
         },
       ],
     },
@@ -258,9 +266,13 @@ export const ListBesoins = ({ color }) => {
 
   const storedUser = localStorage.getItem('user');
   const user = JSON.parse(storedUser);
-  const filteredBesoins =user.poste === 'DG'
-    ? listBesoins.filter(besoin => besoin.besoin.etat === 0)
-    : listBesoins.filter(besoin => besoin.besoin.etat === 1);
+  const filteredBesoins =user.idservice === -1
+    ? listBesoins.filter(b => b.etat === 10)
+    :user.idservice === 1 && user.poste==='employe' ? listBesoins.filter(b => b.service.id === 1 && b.etat===20)
+    :user.idservice === 1 && user.poste==='responsable' ? listBesoins.filter(b => b.service.id === 1 && b.etat===10)
+    :user.idservice === 2 && user.poste==='employe' ? listBesoins.filter(b => b.service.id === 2 && b.etat===20)
+    :user.idservice === 2 && user.poste==='responsable' ? listBesoins.filter(b => b.service.id === 2 && b.etat===10)
+    : listBesoins.filter(b => b.etat === 10);
   const [selectedIdBesoin, setSelectedIdBesoin] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -279,6 +291,17 @@ export const ListBesoins = ({ color }) => {
   };
 //   console.log(JSON.stringify(listBesoins))
 
+const handleValider= async(idbesoin) =>{
+  try {
+    const response = await axios.put(link+"/besoin/valider1/"+idbesoin);
+      console.log(link+"/besoin/valider1/"+idbesoin)
+      console.log(response.data);
+    // Handle the response data
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    // Handle errors
+  }
+}
   return (
     <>
       <div className="w-full mb-12 px-4">
@@ -334,7 +357,7 @@ export const ListBesoins = ({ color }) => {
               </thead>
               <tbody>
                 {filteredBesoins.map((besoin) => (
-                  <tr key={besoin.besoin.id}>
+                  <tr key={besoin.id}>
                     <th className="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left flex items-center">
                       <span
                         className={
@@ -344,15 +367,15 @@ export const ListBesoins = ({ color }) => {
                             : "text-white")
                         }
                       >
-                        {besoin.besoin.id}
+                        {besoin.id}
                       </span>
                     </th>
                     <td>
-                      {besoin.etat === 1
+                      {besoin.etat === 20
                         ? "Validé"
-                        : besoin.besoin.etat === 0
+                        : besoin.etat === 0
                         ? "En Attente"
-                        : besoin.besoin.etat === 2
+                        : besoin.etat === -1
                         ? "Refusé"
                         : "Inconnu"}
                     </td>
@@ -360,16 +383,16 @@ export const ListBesoins = ({ color }) => {
                       <button
                         className="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
-                        onClick={() => openModal(besoin.idbesoin)}
+                        onClick={() => openModal(besoin.id)}
                       >
                         Articles
                       </button>
-                      {besoin.besoin.etat === 1 && (
+                      {besoin.etat === 20 && (
                         <button
                           className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={() =>
-                            handleGenerateProforma(besoin.besoin.id)
+                            handleGenerateProforma(besoin.id)
                           }
                         >
                           Generer Pro forma
@@ -381,7 +404,7 @@ export const ListBesoins = ({ color }) => {
                           className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
                           onClick={() =>
-                            handleGenerateProforma(besoin.idbesoin)
+                            handleValider(besoin.id)
                           }
                         >
                           Valider
@@ -411,9 +434,7 @@ export const ListBesoins = ({ color }) => {
             onClick={() => setShowModal(false)}
           >
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              {/*content*/}
               <div className=" border-2 px-4 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                   <h3 className="text-xl font-semibold">
                     Liste des articles dont on abesoin
@@ -429,14 +450,14 @@ export const ListBesoins = ({ color }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {besoins
-                        .find((besoin) => besoin.besoin.id === selectedIdBesoin)
+                      {/* {besoins
+                        .find((besoin) => besoin.id === selectedIdBesoin)
                         .listeBesoin.produits.map((article) => (
                           <tr key={article.id} className=" text-center">
                             <td>{article.id}</td>
                             <td>{article.nomProduit}</td>
                           </tr>
-                        ))}
+                        ))} */}
                     </tbody>
                   </table>
                 </div>

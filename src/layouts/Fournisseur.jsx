@@ -7,6 +7,7 @@ import { AjouterFournisseur } from 'views/fournisseur/AjouterFournisseur'
 import { ListeFournisseur } from 'views/fournisseur/ListeFournisseur'
 import { AjouterProduits } from 'views/produits/AjouterProduits'
 import { ListeProduits } from 'views/produits/ListeProduits'
+import { DemandeProforma } from 'views/proforma/DemandeProforma'
 
 export const Fournisseur = () => {
   return (
@@ -20,6 +21,7 @@ export const Fournisseur = () => {
           <Switch>
             <Route path="/fournisseur/list" exact component={ListeFournisseur} />
             <Route path="/fournisseur/add" exact component={AjouterFournisseur} />
+            <Route path="/fournisseur/demandeProforma" exact component={DemandeProforma} />
             <Route path="/fournisseur/produits/list" exact component={ListeProduits} />
             <Route path="/fournisseur/produits/add" exact component={AjouterProduits} />
             <Redirect from="/fournisseur" to="/fournisseur/list" />

@@ -1,16 +1,61 @@
 import React from 'react'
 
 export const BonDachat = ({fournisseur}) => {
+    const formatDate=(dateBonDeCommande)=>{
+      const localDateTime = new Date(Date.UTC(...dateBonDeCommande));
+    const formattedDateTime = `${localDateTime.toISOString().slice(0, 19)}.${localDateTime.getUTCMilliseconds().toString().padStart(3, '0')}`;
+      // return formattedDateTime;
+      JSON.stringify()
+  }
+
+
+
     const color = "light";
   return (
     <div className="w-full px-4  mt-4 text-left">
                   <p className=" text-lg">
                     {" "}
-                    <span className=" font-bold">Fournisseur:</span> {fournisseur.nomFournisseur}
+                    <span className=" font-bold">Fournisseur:</span> {fournisseur.fournisseur.nom_fournisseur}
                   </p>
                   <p className=" text-lg">
                     {" "}
-                    <span className=" font-bold">Delai:</span> {fournisseur.delai}
+                    <span className=" font-bold">Prix de livraison:</span> {fournisseur.fournisseur.prix_livraison}
+                  </p>
+                  <p className=" text-lg">
+                    {" "}
+                    <span className=" font-bold">Nom du responsable:</span> {fournisseur.fournisseur.nom_responsable}
+                  </p>
+                  <p className=" text-lg">
+                    {" "}
+                    <span className=" font-bold">Adresse:</span> {fournisseur.fournisseur.adresse}
+                  </p>
+                  <p className=" text-lg">
+                    {" "}
+                    {/* <span className=" font-bold">Date: {formatDate(fournisseur.fournisseur.dateBonDeCommande)} ii</span> */}
+                  </p>
+                  <br />
+                  <br />
+                  <hr />
+                  <br /><br />
+                  <p className=" text-lg">
+                    {" "}
+                    <span className=" font-bold">Entreprise: JVP</span>
+                  </p>
+                  <p className=" text-lg">
+                    {" "}
+                    <span className=" font-bold">Adresse: Andoharanofotsy</span>
+                  </p>
+                  <p className=" text-lg">
+                    {" "}
+                    <span className=" font-bold">Responsable: Jeddy Ranivoaritida</span>
+                  </p>
+                  <p className=" text-lg">
+                    {" "}
+                    <span className=" font-bold">Téléphone: 0340123456</span>
+                  </p>
+                  <p className=" text-lg">
+                    {" "}
+                    <span className=" font-bold">Mail: jeddy100@hotmail.com</span>
                   </p>
                   <div className="block w-full overflow-x-auto mt-4">
                     {/* Projects table */}
@@ -55,7 +100,7 @@ export const BonDachat = ({fournisseur}) => {
                                 : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                             }
                           >
-                            Taxe %
+                            Prix Unitaire
                           </th>
                           <th
                             className={
@@ -70,8 +115,8 @@ export const BonDachat = ({fournisseur}) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {fournisseur.articles.map((article) => (
-                          <tr key={article.idarticle}>
+                        {fournisseur.listeArticles.map((article) => (
+                          <tr key={article.id}>
                             <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left flex items-center">
                               <span
                                 className={
@@ -91,7 +136,7 @@ export const BonDachat = ({fournisseur}) => {
                                 {article.prixHorsTaxe}
                             </td>
                             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4">
-                                {article.taxe}
+                                {article.prixUnitaire}
                             </td>
                             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4">
                                 {article.prixTTC}
@@ -114,7 +159,7 @@ export const BonDachat = ({fournisseur}) => {
                                 TOTAL HT:
                               </span>
                             </th>
-                            <td>678900 Ariary</td>
+                            <td>{fournisseur.totalHorsTaxes} Ariary</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -132,7 +177,7 @@ export const BonDachat = ({fournisseur}) => {
                                 TTC:
                               </span>
                             </th>
-                            <td>699900 Ariary</td>
+                            <td>{fournisseur.totalTTC} Ariary</td>
                         </tr>
                       </tbody>
                     </table>

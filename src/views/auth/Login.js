@@ -9,13 +9,13 @@ export default function Login() {
   // const [rememberMe, setRememberMe] = useState(false);
 
   const listUsers=[
-    {id: 1, email: "emp1", password: "123", poste:"employe", service:"IT"},
-    {iT: 2, email: "emp2", password: "123", poste:"responsable", service:"IT"},
-    {iT: 3, email: "emp3", password: "123", poste:"directeur", service:"IT"},
-    {id: 4, email: "emp4", password: "123", poste:"employe", service:"finance"},
-    {id: 5, email: "emp5", password: "123", poste:"responsable", service:"finance"},
-    {id: 6, email: "emp6", password: "123", poste:"directeur", service:"finance"},
-    {id: 7, email: "boss", password: "123", poste:"DG", service:"DAF"}
+    {id: 1, email: "empIT", password: "123", poste:"employe", service:"IT",idservice:1},
+    {iT: 2, email: "respIT", password: "123", poste:"responsable", service:"IT",idservice:1},
+    {iT: 3, email: "emp3", password: "123", poste:"directeur", service:"IT",idservice:1},
+    {id: 4, email: "empfinance", password: "123", poste:"employe", service:"finance",idservice:2},
+    {id: 5, email: "respfinance", password: "123", poste:"responsable", service:"finance",idservice:2},
+    {id: 6, email: "emp6", password: "123", poste:"directeur", service:"finance",idservice:2},
+    {id: 7, email: "boss", password: "123", poste:"DG", service:"DAF",idservice:-1}
   ]
 
   const [user, setUser] = useState([]);

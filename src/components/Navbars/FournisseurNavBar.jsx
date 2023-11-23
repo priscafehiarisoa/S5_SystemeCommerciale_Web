@@ -29,7 +29,7 @@ export const FournisseurNavBar = () => {
             <div className=" w-72 flex-row flex-wrap items-center lg:ml-auto mr-3 text-white font-normal">
               {/* <div className="relative flex w-full flex-wrap items-stretch"> */}
               {`Poste: ${user.poste}, Service: ${user.service}`}
-
+            
               {/* </div> */}
             </div>
             {/* User */}

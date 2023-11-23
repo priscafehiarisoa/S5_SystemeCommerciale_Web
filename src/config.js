@@ -1,5 +1,5 @@
 const backendConfig = {
-    host: "192.168.36.225",
+    host: "192.168.43.222",
     port: "8080",
   };
 

@@ -1,9 +1,31 @@
 import JsPDF from 'jspdf';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BonDachat } from './BonDachat';
+import backendConfig from "config";
+import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 export const Proforma = () => {
+  const [listFournisseur, setlistFournisseur] = useState([]);
+  const link = `http://${backendConfig.host}:${backendConfig.port}`;
+  let {idbesoin}=useParams();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(link+"/besoin/getBesoin/"+idbesoin);
+          console.log(link+"/besoin/getBesoin/"+idbesoin)
+          console.log(response.data);
+          setlistFournisseur(response.data);
+          console.log(listFournisseur);
+        // Handle the response data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle errors
+      }
+    };
 
+    fetchData();
+  }, []);
 
   const proformas = [
     {
@@ -54,9 +76,12 @@ export const Proforma = () => {
   const generatePDF = () => {
 
     const report = new JsPDF('portrait','pt','a2');
-    report.html(document.querySelector('#report')).then(() => {
-        report.save('report.pdf');
-    });
+    listFournisseur.map((fournisseur) => {
+
+      report.html(document.querySelector(`#bon${fournisseur.id_bonsDeCommande}`)).then(() => {
+          report.save(`#bon${fournisseur.id_bonsDeCommande}.pdf`);
+      });
+    })
 }
   return (
     <div>
@@ -64,10 +89,14 @@ export const Proforma = () => {
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
           <div className="px-6">
             <div className="flex flex-wrap justify-center" id='report'>
-              <h2 className=" mt-3 text-3xl font-semibold text-center">Pro Forma</h2>
-              {proformas.map((fournisseur) => (
-                <BonDachat fournisseur={fournisseur}/>
-              ))}
+              {/* <h2 className=" mt-3 text-3xl font-semibold text-center mb-4">Pro Forma</h2> */}
+              <hr />
+                {listFournisseur.map((fournisseur) => (
+              <div id={`bon${fournisseur.id_bonsDeCommande}`} className='mt-5'>
+                  <h2 className=" mt-3 text-xl font-semibold text-center">Bon de commande, numéro: {`${fournisseur.id_bonsDeCommande}`}</h2>
+                  <BonDachat fournisseur={fournisseur}/>
+              </div>
+                ))}
             </div>
 
             <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
