@@ -1,7 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Login() {
+
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [rememberMe, setRememberMe] = useState(false);
+
+  const listUsers=[
+    {id: 1, email: "empIT", password: "123", poste:"employe", service:"IT",idservice:1},
+    {iT: 2, email: "respIT", password: "123", poste:"responsable", service:"IT",idservice:1},
+    {iT: 3, email: "emp3", password: "123", poste:"directeur", service:"IT",idservice:1},
+    {id: 4, email: "empfinance", password: "123", poste:"employe", service:"finance",idservice:2},
+    {id: 5, email: "respfinance", password: "123", poste:"responsable", service:"finance",idservice:2},
+    {id: 6, email: "emp6", password: "123", poste:"directeur", service:"finance",idservice:2},
+    {id: 7, email: "boss", password: "123", poste:"DG", service:"DAF",idservice:-1}
+  ]
+
+  const [user, setUser] = useState([]);
+  const history = useHistory();
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    // Use the name of the input field to update the corresponding state
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
+  };
+
+  const handleSignIn = () => {
+    const foundUser = listUsers.find(
+      (u) => u.email === user.email && u.password === user.password
+    );
+
+    if (foundUser) {
+      // Store the user information in local storage
+      localStorage.setItem('user', JSON.stringify(foundUser));
+
+      // Redirect to the desired page (e.g., '/besoin/list')
+      history.push('/besoin/list');
+    } else {
+      console.log('Invalid email or password');
+    }
+  }
+
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -56,6 +100,8 @@ export default function Login() {
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Email"
+                      name="email"
+                      onChange={handleInputChange}
                     />
                   </div>
 
@@ -70,6 +116,8 @@ export default function Login() {
                       type="password"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Password"
+                      name="password"
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div>
@@ -89,6 +137,7 @@ export default function Login() {
                     <button
                       className="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                       type="button"
+                      onClick={handleSignIn}
                     >
                       Sign In
                     </button>
