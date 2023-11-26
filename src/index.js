@@ -16,8 +16,8 @@ import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
 import Index from "views/Index.js";
 import { Besoin } from "layouts/Besoin";
-import { Proforma } from "views/proforma/Proforma";
 import { Fournisseur } from "layouts/Fournisseur";
+import {ProformaLayout} from "./layouts/ProformaLayout";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -27,6 +27,7 @@ ReactDOM.render(
       <Route path="/auth" component={Auth} />
       <Route path="/besoin" component={Besoin}/>
       <Route path="/fournisseur" component={Fournisseur}/>
+      <Route path="/proforma" component={ProformaLayout}/>
       {/* add routes without layouts */}
       <Route path="/landing" exact component={Landing} />
       <Route path="/profile" exact component={Profile} />
