@@ -280,7 +280,42 @@ export default function Sidebar() {
                   Liste des pro forma
                 </Link>
               </li>
+
+              {/*demande mail en proforma */}
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/fournisseur/produits/list") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/proforma"
+                >
+                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  demande mail proforma
+                </Link>
+              </li>
+
+              {/*ajout exel en proforma */}
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/fournisseur/produits/list") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/proforma/AddExelProforma"
+                >
+                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  ajouter un exel en proforma
+                </Link>
+              </li>
             </ul>
+
+
+
 
             {/* Divider */}
             {/* <hr className="my-4 md:min-w-full" /> */}

@@ -15,10 +15,11 @@ export const AjoutBesoin = ({ color }) => {
       "id": 1
     },
     "etat": 0,
-    "motif": "besoin service 1 ",
+    "motif": "",
     "besoinProduits": []
   }
   )
+
 
     const [selectedArticles, setSelectedArticles] = useState([]);
     const [services, setservices] = useState([])
@@ -34,6 +35,9 @@ export const AjoutBesoin = ({ color }) => {
         setservices(response2.data);
         if(user.idservice!==-1){
             setlistesServices(services.filter(s=>s.id===user.idservice))
+          for (let i = 0; i < listesServices; i++) {
+            setArticles({...articles, service: {id:user.idservice}})
+          }
         }
         else{
           setlistesServices(services)
@@ -48,6 +52,7 @@ export const AjoutBesoin = ({ color }) => {
     fetchData();
   }, [link]);
 
+  console.log("huhu "+services)
   const handleCheckboxChange = (id, checked) => {
     setSelectedArticles((prevSelectedArticles) => {
       if (checked) {
@@ -130,7 +135,7 @@ export const AjoutBesoin = ({ color }) => {
   };
 
 
-
+console.log("article"+JSON.stringify(articles))
   return (
     <>
       <div className="w-full mb-12 px-4">
@@ -153,20 +158,28 @@ export const AjoutBesoin = ({ color }) => {
                 </h3>
               </div>
               <div className="mt-4">
-                  <select name="idservice" className="border-0 mt-2 px-3 py-3 placeholder-blueGray-300 text-blueGray-600" onChange={(e)=>setArticles({...articles, service:{id: e.target.value}})} >
-                  {listesServices.map(service =>(
-                    <option value={service.id}>{service.nomService}</option>
-                  ))}
-                  </select>
+                  {/*<select name="idservice" className="border-0 mt-2 px-3 w-full py-3 placeholder-blueGray-300 text-blueGray-600"*/}
+                  {/*        onChange={(e)=>setArticles({...articles, service:{id: e.target.value}})} >*/}
+                  {/*{listesServices?.map((service,index) =>(*/}
+                  {/*  <option key={index} value={service.id}>{service.nomService}</option>*/}
+                  {/*))}*/}
+                  {/*</select>*/}
+                {listesServices?.map((service,index) =>(
+                    <p >service : {service.nomService}</p>
+                ))}
               </div>
               &nbsp; &nbsp;
-              <div className="mt-4">
+              <div className="mt-4 w-full">
+                <label htmlFor="motif"
+                       className="border-t-0  align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left flex items-center"
+                >Motif de la demande</label>
               <input
                         type="text"
                         name="motif"
                         className="border-0 mt-2 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                         id="motif"
                         placeholder="Motif"
+                        required={true}
                         onChange={(e) =>
                             handleMotifChange( e.target.value)
                           }

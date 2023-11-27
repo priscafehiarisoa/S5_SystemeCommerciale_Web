@@ -73,15 +73,13 @@ export const Proforma = () => {
     // Add more proformas as needed
   ];
 
-  const generatePDF = () => {
+  const generatePDF = (id_bonsDeCommande) => {
 
-    const report = new JsPDF('portrait','pt','a2');
-    listFournisseur.map((fournisseur) => {
-
-      report.html(document.querySelector(`#bon${fournisseur.id_bonsDeCommande}`)).then(() => {
-          report.save(`#bon${fournisseur.id_bonsDeCommande}.pdf`);
+      const report = new JsPDF('portrait','pt','a3');
+      report.html(document.getElementById(`bon${id_bonsDeCommande}`)).then(() => {
+          report.save(`bon${id_bonsDeCommande}.pdf`);
+        console.log(`bon${id_bonsDeCommande}.pdf`)
       });
-    })
 }
   return (
     <div>
@@ -92,28 +90,30 @@ export const Proforma = () => {
               {/* <h2 className=" mt-3 text-3xl font-semibold text-center mb-4">Pro Forma</h2> */}
               <hr />
                 {listFournisseur.map((fournisseur) => (
-              <div id={`bon${fournisseur.id_bonsDeCommande}`} className='mt-5'>
-                  <h2 className=" mt-3 text-xl font-semibold text-center">Bon de commande, numéro: {`${fournisseur.id_bonsDeCommande}`}</h2>
-                  <BonDachat fournisseur={fournisseur}/>
-              </div>
-                ))}
-            </div>
+              <div>
+                    <div id={`bon${fournisseur.id_bonsDeCommande}`} className='mt-5 px-6 w-72'>
+                        <h2 className=" mt-3 text-xl font-semibold text-center">Bon de commande, numéro: {`${fournisseur.id_bonsDeCommande}`}</h2>
+                        <BonDachat fournisseur={fournisseur}/>
+                    </div>
 
-            <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-              <div className="flex flex-wrap justify-center">
-                <div className="w-full lg:w-9/12 px-4">
-                  <button
-                  className="font-normal text-lightBlue-500"
-                    onClick={generatePDF}
-                  >
-                    Exporter en PDF
-                  </button>
+                    <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
+                      <div className="flex flex-wrap justify-center">
+                        <div className="w-full lg:w-9/12 px-4">
+                          <button
+                              className="font-normal text-lightBlue-500"
+                              onClick={()=>generatePDF(fournisseur.id_bonsDeCommande)}
+                          >
+                            Exporter en PDF
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                 </div>
-              </div>
-            </div>
+                  ))}
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
