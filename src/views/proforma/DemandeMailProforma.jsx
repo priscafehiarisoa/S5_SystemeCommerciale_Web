@@ -9,6 +9,7 @@ export const DemandeMailProforma =({color})=>{
     const storedUser = localStorage.getItem('user');
     const user = JSON.parse(storedUser);
     const link = `http://${backendConfig.host}:${backendConfig.port}`;
+    const [button,setButton]=useState("Valider")
 
     const [formdata,setFormdata]=useState({
         fournisseur:[],
@@ -34,6 +35,7 @@ export const DemandeMailProforma =({color})=>{
 
     const handleValidation=async ()=>{
         try{
+            setButton("envoi de mail en cours ...")
             const resp = await axios.post(link+"/besoin/sendEmail",formdata)
             history.push("/besoin/list")
         }catch (e){
@@ -89,7 +91,7 @@ export const DemandeMailProforma =({color})=>{
                                         (color === "light" ? "text-blueGray-700" : "text-white")
                                     }
                                 >
-                                    Liste des articles
+                                    Envoyer une demande de proforma à des fournisseurs
                                 </h3>
                             </div>
                         </div>
@@ -207,10 +209,11 @@ export const DemandeMailProforma =({color})=>{
                                 type="button"
                                 onClick={handleValidation}
                             >
-                                Valider
+                                {button}
                             </button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </>

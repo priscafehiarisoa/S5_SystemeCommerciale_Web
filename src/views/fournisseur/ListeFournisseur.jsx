@@ -1,60 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
+import backendConfig from "../../config";
 
 export const ListeFournisseur = () => {
   const [fournisseur, setFournisseur] = useState([]);
+  const link = `http://${backendConfig.host}:${backendConfig.port}`;
+
   useEffect(() => {
-    const fetchData = () => {
-      setFournisseur([
-        {
-          id:1,
-          nom_fournisseur: "Google",
-          nom_responsable: "Sundar Pichai",
-          Adresse: "USA",
-          telephone: "111222333",
-          prix_livraison: "2500",
-        },
-        {
-          id:2,
-          nom_fournisseur: "Amazon",
-          nom_responsable: "Andy Jassy",
-          Adresse: "USA",
-          telephone: "444555666",
-          prix_livraison: "2000",
-        },
-        {
-          id:3,
-          nom_fournisseur: "Tesla",
-          nom_responsable: "Elon Musk",
-          Adresse: "USA",
-          telephone: "777888999",
-          prix_livraison: "4500",
-        },
-        {
-          id:4,
-          nom_fournisseur: "Sony",
-          nom_responsable: "Kenichiro Yoshida",
-          Adresse: "Japan",
-          telephone: "123123123",
-          prix_livraison: "3200",
-        },
-        {
-          id:5,
-          nom_fournisseur: "Intel",
-          nom_responsable: "Pat Gelsinger",
-          Adresse: "USA",
-          telephone: "456456456",
-          prix_livraison: "2800",
-        },
-        {
-          id:6,
-          nom_fournisseur: "IBM",
-          nom_responsable: "Arvind Krishna",
-          Adresse: "USA",
-          telephone: "789789789",
-          prix_livraison: "3500",
-        },
-      ]);
+    const fetchData = async () => {
+        try{
+          const fo = await axios.get(link+"/fournisseur")
+          setFournisseur(fo.data)
+        }      catch (e) {
+          console.log(e)
+        }
     };
     fetchData();
   },[]);
@@ -115,6 +75,13 @@ export const ListeFournisseur = () => {
                     "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
                     ("bg-blueGray-50 text-blueGray-500 border-blueGray-100")
                   }
+                  >
+                    email
+                  </th><th
+                  className={
+                    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                    ("bg-blueGray-50 text-blueGray-500 border-blueGray-100")
+                  }
                   ></th>
                 </tr>
               </thead>
@@ -141,7 +108,10 @@ export const ListeFournisseur = () => {
                         {f.telephone}
                     </td>
                     <td className="">
-                        {f.Adresse}
+                        {f.adresse}
+                    </td>
+                    <td className="">
+                        {f.email}
                     </td>
                     <td>
                     <button

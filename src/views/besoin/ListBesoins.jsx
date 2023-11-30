@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import backendConfig from "config";
 import axios from "axios";
+import {MyAlert} from "../../components/MyAlert";
 
 export const ListBesoins = ({ color }) => {
   color = "light";
@@ -9,6 +10,9 @@ export const ListBesoins = ({ color }) => {
   const [listBesoins, setlistBesoins] = useState([]);
   const [valide,setValide]=useState(null)
   const link = `http://${backendConfig.host}:${backendConfig.port}`;
+  const [changes,setChanges]=useState(0)
+  const [hidden,setHidden]=useState("hidden")
+  const [textErrors,setTextErrors]=useState("")
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,47 +30,9 @@ export const ListBesoins = ({ color }) => {
     };
 
     fetchData();
-  }, []);
+  }, [changes]);
 
   const [besoinProduit,setBesoinProduit]=useState([])
-
-  const besoins = [
-    {
-      idbesoin: 1,
-      etat: 0,
-      articles: [
-        {
-          idarticle: 1,
-          nomarticle: "Ordinateur Portable",
-          quantite: 3
-        },
-        {
-          idarticle: 2,
-          nomarticle: "Imprimante",
-          quantite: 3
-
-        },
-      ],
-    },
-    {
-      idbesoin: 2,
-      etat: 1,
-      articles: [
-        {
-          idarticle: 3,
-          nomarticle: "Écran LCD",
-          quantite: 3
-
-        },
-        {
-          idarticle: 4,
-          nomarticle: "Clavier sans fil",
-          quantite: 3
-
-        },
-      ],
-    },
-  ];
 
   const storedUser = localStorage.getItem('user');
   const user = JSON.parse(storedUser);
@@ -76,7 +42,7 @@ export const ListBesoins = ({ color }) => {
     :user.idservice === 1 && user.poste==='responsable' ? listBesoins.filter(b => b.service.id === 1)
     :user.idservice === 2 && user.poste==='employe' ? listBesoins.filter(b => b.service.id === 2 )
     :user.idservice === 2 && user.poste==='responsable' ? listBesoins.filter(b=> b.service.id )
-    : listBesoins.filter(b => b.etat === 10);
+    : listBesoins.filter(b => b.etat === 10 && b.service.id===-1);
   const [selectedIdBesoin, setSelectedIdBesoin] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -98,6 +64,7 @@ export const ListBesoins = ({ color }) => {
       console.log(link+"/besoin/valider1/"+id)
       console.log(response.data);
       setValide(id)
+      setChanges(changes+1)
       // Handle the response data
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -106,7 +73,7 @@ export const ListBesoins = ({ color }) => {
   }
 
   const boutonValider=(id,etat)=>{
-    if(user.idservice===2 && user.poste==="responsable" && etat!==20){
+    if(user.idservice===2 && user.poste==="responsable" && etat===0 ){
       return (
 
           <button
@@ -197,25 +164,36 @@ export const ListBesoins = ({ color }) => {
 
   const history = useHistory();
 
-  const handleGenerateProforma = (idbesoin) => {
-    // Replace '/article/:idbesoin' with the actual route you want to navigate to
-    // You can also include parameters by appending them to the URL
-    console.log("first");
-    history.push(`/besoin/proforma/${idbesoin}`);
-  };
-//   console.log(JSON.stringify(listBesoins))
+  const handleGenerateProforma = async (idbesoin) => {
+    setTextErrors("")
+    try{
+      const response = await axios.get(link+"/besoin/getBesoin/"+idbesoin);
+      history.push(`/besoin/proforma/${idbesoin}`);
 
+    }catch (e){
+      setTextErrors(e.response.data.message)
+      console.log(e.response.data.message)
+    }
+
+
+  };
 const handleValider= async(idbesoin) =>{
   try {
     const response = await axios.put(link+"/besoin/valider2/"+idbesoin);
       console.log(link+"/besoin/valider2/"+idbesoin)
       console.log(response.data);
+    setChanges(changes+1)
     // Handle the response data
   } catch (error) {
     console.error("Error fetching data:", error);
     // Handle errors
   }
 }
+
+  function getMoinsDisant(id) {
+    history.push("/proforma/MoinsDisan/"+id)
+  }
+
   return (
     <>
       <div className="w-full mb-12 px-4">
@@ -225,6 +203,10 @@ const handleValider= async(idbesoin) =>{
             (color === "light" ? "bg-white" : "bg-lightBlue-900 text-white")
           }
         >
+
+
+
+
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
@@ -239,6 +221,11 @@ const handleValider= async(idbesoin) =>{
               </div>
             </div>
           </div>
+
+          {textErrors &&  <div className="px-6">
+            <MyAlert hidden={hidden} textErrors={textErrors}></MyAlert>
+          </div>}
+
           <div className="block w-full overflow-x-auto p-4">
             {showModal? contenuModal():""}
             {/* Projects table */}
@@ -284,6 +271,24 @@ const handleValider= async(idbesoin) =>{
                           ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                           : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
                   }></th>
+                  <th className={
+                      "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                      (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                  }></th>
+                  <th className={
+                      "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                      (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                  }></th>
+                  <th className={
+                      "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +
+                      (color === "light"
+                          ? "bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                          : "bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700")
+                  }></th>
                   {/*<th className={*/}
                   {/*    "px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left " +*/}
                   {/*    (color === "light"*/}
@@ -322,7 +327,7 @@ const handleValider= async(idbesoin) =>{
                         : besoin.etat === 0
                         ? "En Attente"
                         : besoin.etat === 10
-                        ? "validé par le responsable"
+                        ? "validé par la finance"
                         : besoin.etat === -1
                         ? "Refusé"
                         : "Inconnu"}
@@ -338,11 +343,24 @@ const handleValider= async(idbesoin) =>{
                       >
                         Articles
                       </button>
+                    </td>
 
+                    <td className="">
+                      <button
+                        className="bg-blueGray-600 text-white active:bg-blueGray-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() => getMoinsDisant(besoin.id)}
+                      >
+                        Moins disant
+                      </button>
+                    </td>
 
+                    <td>
                       {/*bouton valider */}
                       {boutonValider(besoin.id,besoin.etat)}
+                    </td>
 
+                    <td>
                       {(user.poste==="responsable" || user.poste==="directeur" || user.poste==="DG") && (<button
                           className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                           type="button"
@@ -350,18 +368,20 @@ const handleValider= async(idbesoin) =>{
                         {" "}
                         Supprimer
                       </button>)}
+                    </td>
 
-                      {besoin.etat === 20 && (
+                    <td>
+
                           <button
-                              className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                              className="bg-emerald-500 text-white active:bg-emerald-800 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                               type="button"
                               onClick={() =>
                                   handleGenerateProforma(besoin.id)
                               }
                           >
-                            Generer Pro forma
+                            voir le bon de commande
                           </button>
-                      )}
+
                     </td>
 
                   </tr>

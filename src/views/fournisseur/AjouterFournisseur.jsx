@@ -1,44 +1,42 @@
 import React, {useState} from "react";
+import backendConfig from "../../config";
+import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 export const AjouterFournisseur = () => {
-
+  const link = `http://${backendConfig.host}:${backendConfig.port}`;
+  const history=useHistory();
   const [formData, setFormData] = useState({
     nom_fournisseur:'',
     nom_responsable:'',
-    Adresse:'',
+    email:'',
+    adresse:'',
     telephone:'',
     prix_livraison:'',
   });
 
-  const handleInputChange = (e)=>{
-    const { name, value, type, files } = e.target;
+  const resetFormdata=()=>{
+    setFormData({
+      nom_fournisseur:'',
+      nom_responsable:'',
+      email:'',
+      adresse:'',
+      telephone:'',
+      prix_livraison:''
+    })
+  }
 
-    if (type === 'file') {
-      setFormData({
-        ...formData,
-        [name]: files[0],
-      });
-    } else {
-      // Otherwise, handle regular input changes
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
-    }
-  };
-
-  const handleSubmit = (e)=>{
+  const handleSubmit = async (e)=>{
     e.preventDefault();
-
-    const formDataObject=new FormData();
-
-    formDataObject.append("nom_fournisseur",formData.nom_fournisseur);
-    formDataObject.append("nom_responsable",formData.nom_responsable);
-    formDataObject.append("Adresse",formData.Adresse);
-    formDataObject.append("telephone",formData.telephone);
-    formDataObject.append("prix_livraison",formData.prix_livraison);
-    console.log(formData);
-    console.log(formDataObject);
+    console.log(formData)
+    try{
+      const resp = await axios.post(link+"/fournisseur",formData)
+      if(resp.status===200){
+        history.push(`/fournisseur/list`);
+      }
+    }catch (e){
+      console.log(e)
+    }
   }
 
 
@@ -61,7 +59,25 @@ export const AjouterFournisseur = () => {
               name="nom_fournisseur"
               class="w-full px-3 py-2 border border-gray-400 rounded focus:outline-none focus:border-indigo-500"
               placeholder="Apple"
-              onChange={handleInputChange}
+              onChange={(e)=>setFormData({...formData,nom_fournisseur: e.target.value})}
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label
+              for="nom_fournisseur"
+              class="block text-gray-600 text-sm font-medium mb-2"
+            >
+              email
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              class="w-full px-3 py-2 border border-gray-400 rounded focus:outline-none focus:border-indigo-500"
+              placeholder="xxxx@gmail.com"
+              onChange={(e)=>setFormData({...formData,email: e.target.value})}
               required
             />
           </div>
@@ -79,7 +95,7 @@ export const AjouterFournisseur = () => {
               name="nom_responsable"
               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               placeholder="Tim Cook"
-              onChange={handleInputChange}
+              onChange={(e)=>setFormData({...formData,nom_responsable: e.target.value})}
               required
             />
           </div>
@@ -97,7 +113,7 @@ export const AjouterFournisseur = () => {
               name="Adresse"
               class="w-full px-3 py-2 border border-gray-400 rounded focus:outline-none focus:border-indigo-500"
               placeholder="Silicon Valley,USA"
-              onChange={handleInputChange}
+              onChange={(e)=>setFormData({...formData,adresse: e.target.value})}
               required
             />
           </div>
@@ -115,7 +131,7 @@ export const AjouterFournisseur = () => {
               name="telephone"
               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               placeholder="0371234567"
-              onChange={handleInputChange}
+              onChange={(e)=>setFormData({...formData,telephone: e.target.value})}
               required
             />
           </div>
@@ -133,7 +149,7 @@ export const AjouterFournisseur = () => {
               name="prix_livraison"
               class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
               placeholder="5000 Ariary"
-              onChange={handleInputChange}
+              onChange={(e)=>setFormData({...formData,prix_livraison: e.target.value})}
               required
             />
           </div>

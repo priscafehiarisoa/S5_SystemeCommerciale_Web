@@ -20,6 +20,23 @@ export const AjoutBesoin = ({ color }) => {
   }
   )
 
+  const selects =()=>{
+    if(user.idservice === -1){
+      return (
+          <>
+            <label htmlFor="te"> services </label>
+            <select name="idservice" id="te" className="border-0 mt-2 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                    onChange={(e)=>setArticles({...articles, service:{id: e.target.value}})} >
+              {listesServices?.map((service,index) =>(
+                  <option key={index} value={service.id}>{service.nomService}</option>
+              ))}
+            </select>
+          </>
+      )
+    }
+
+  }
+
 
     const [selectedArticles, setSelectedArticles] = useState([]);
     const [services, setservices] = useState([])
@@ -33,6 +50,7 @@ export const AjoutBesoin = ({ color }) => {
         const response2 = await axios.get(link+"/service");
         setproduits(response.data);
         setservices(response2.data);
+        console.log("hurray "+JSON.stringify(services))
         if(user.idservice!==-1){
             setlistesServices(services.filter(s=>s.id===user.idservice))
           for (let i = 0; i < listesServices; i++) {
@@ -154,19 +172,15 @@ console.log("article"+JSON.stringify(articles))
                     (color === "light" ? "text-blueGray-700" : "text-white")
                   }
                 >
-                  Liste des articles
+                  Formulation des besoins
                 </h3>
               </div>
               <div className="mt-4">
-                  {/*<select name="idservice" className="border-0 mt-2 px-3 w-full py-3 placeholder-blueGray-300 text-blueGray-600"*/}
-                  {/*        onChange={(e)=>setArticles({...articles, service:{id: e.target.value}})} >*/}
-                  {/*{listesServices?.map((service,index) =>(*/}
-                  {/*  <option key={index} value={service.id}>{service.nomService}</option>*/}
-                  {/*))}*/}
-                  {/*</select>*/}
-                {listesServices?.map((service,index) =>(
+                {user.idservice!==-1 &&
+                listesServices?.map((service,index) =>(
                     <p >service : {service.nomService}</p>
                 ))}
+
               </div>
               &nbsp; &nbsp;
               <div className="mt-4 w-full">
@@ -185,9 +199,13 @@ console.log("article"+JSON.stringify(articles))
                           }
                       />
               </div>
+              <div className="mt-4 w-full">
+                {selects()}
+              </div>
             </div>
           </div>
           <div className="block w-full overflow-x-auto">
+            <div className="max-h-3 overflow-y-auto">
             {/* Projects table */}
             <table className="items-center w-full bg-transparent border-collapse">
               <thead>
@@ -259,6 +277,7 @@ console.log("article"+JSON.stringify(articles))
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
           <div className="rounded-t  mb-0 px-6 py-6">
             <div className="text-center flex justify-between">

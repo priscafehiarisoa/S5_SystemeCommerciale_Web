@@ -99,12 +99,12 @@ export const Proforma = () => {
                     <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                       <div className="flex flex-wrap justify-center">
                         <div className="w-full lg:w-9/12 px-4">
-                          <button
+                          {fournisseur.besoin.etat===20 && <button
                               className="font-normal text-lightBlue-500"
                               onClick={()=>generatePDF(fournisseur.id_bonsDeCommande)}
                           >
                             Exporter en PDF
-                          </button>
+                          </button> }
                         </div>
                       </div>
                     </div>

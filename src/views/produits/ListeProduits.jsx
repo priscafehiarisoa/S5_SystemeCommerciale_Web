@@ -1,42 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
+import backendConfig from "../../config";
 
 export const ListeProduits = () => {
   const [produits, setproduits] = useState([]);
+  const link = `http://${backendConfig.host}:${backendConfig.port}`;
+
+  const supprimer =async (id)=>{
+    try{
+      const respons = await axios.put(link+`/effacer/${id}`)
+    }  catch (e) {
+      console.log(e)
+    }
+  };
   useEffect(() => {
-    const fetchData = () => {
-      setproduits([
-        {
-          id: 1,
-          nom_produit: "Macbook M3",
-          mesure: "unité",
-        },
-        {
-          id: 2,
-          nom_produit: "Gazoil",
-          mesure: "litre",
-        },
-        {
-          id: 3,
-          nom_produit: "Samsung Galaxy S21",
-          mesure: "unité",
-        },
-        {
-          id: 4,
-          nom_produit: "Stylo Bleus",
-          mesure: "piece",
-        },
-        {
-          id: 5,
-          nom_produit: "HP Spectre x360",
-          mesure: "unité",
-        },
-        {
-          id: 6,
-          nom_produit: "Papier Hygiénique",
-          mesure: "unité",
-        },
-      ]);
+    const fetchData = async () => {
+      try{
+        const fo = await axios.get(link+"/produit")
+        setproduits(fo.data)
+      }      catch (e) {
+        console.log(e)
+      }
     };
     fetchData();
   }, []);
@@ -50,7 +35,7 @@ export const ListeProduits = () => {
           <Link
             type="submit"
             class=" bg-emerald-500 text-white active:bg-emerald-600  font-bold uppercase text-sm px-4 py-2 rounded focus:outline-none focus:shadow-outline-indigo hover:bg-indigo-800"
-            to="/fournisseur/add"
+            to="/fournisseur/produits/add"
           >
             Ajouter Produit
           </Link>
@@ -80,8 +65,8 @@ export const ListeProduits = () => {
                       {p.id}
                     </span>
                   </th>
-                  <td className=" align-middle ">{p.nom_produit}</td>
-                  <td className=" align-middle ">{p.mesure}</td>
+                  <td className=" align-middle ">{p.nomProduit}</td>
+                  <td className=" align-middle ">{p.unite.nomUnite}</td>
                   <td>
                     <button
                       className="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -93,6 +78,7 @@ export const ListeProduits = () => {
                     <button
                       className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
+                      onClick={supprimer(p.id)}
                     >
                       {" "}
                       Supprimer

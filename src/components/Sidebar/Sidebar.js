@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 
 import NotificationDropdown from "components/Dropdowns/NotificationDropdown.js";
@@ -7,6 +7,137 @@ import UserDropdown from "components/Dropdowns/UserDropdown.js";
 
 export default function Sidebar() {
   const [collapseShow, setCollapseShow] = React.useState("hidden");
+  const [user,setUser]=useState({})
+
+
+  useEffect( ()=>{
+    const storedUser = localStorage.getItem('user');
+    console.log("||??||"+storedUser)
+    setUser((prevUser) => {
+      // Vérifier si la valeur a changé avant de la mettre à jour
+      if (JSON.stringify(prevUser) !== storedUser) {
+        return JSON.parse(storedUser);
+      } else {
+        return prevUser;
+      }
+    });      }
+  ,[]);
+  const menuFournisseur=()=>{
+    if(user.idservice===2){
+      return (
+          <>
+            <hr className="my-4 md:min-w-full" />
+            {/* Heading */}
+            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
+              Fournisseurs & Produits
+            </h6>
+            {/* Navigation */}
+
+            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/fournisseur/list") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/fournisseur/list"
+                >
+                  <i
+                      className={
+                          "fas fa-list  text-blueGray-400 mr-2 text-sm" +
+                          (window.location.href.indexOf("/fournisseur/list") !== -1
+                              ? "opacity-75"
+                              : "text-blueGray-300")
+                      }
+                  ></i>{" "}
+                  Liste des Fournisseurs
+                </Link>
+              </li>
+
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/fournisseur/produits/list") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/fournisseur/produits/list"
+                >
+                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  Liste des produits
+                </Link>
+              </li>
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/fournisseur/add") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/fournisseur/proforma/list"
+                >
+                  <i className="fas fa-list fa-beat text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  Liste des pro forma
+                </Link>
+              </li>
+
+              {/*demande mail en proforma */}
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/fournisseur/produits/list") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/proforma"
+                >
+                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  demande mail proforma
+                </Link>
+              </li>
+
+              {/*ajout exel en proforma */}
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/fournisseur/produits/list") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/proforma/AddExelProforma"
+                >
+                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  ajouter un exel en proforma
+                </Link>
+              </li>
+
+              {/*list produit fournisseur */}
+              <li className="items-center">
+                <Link
+                    className={
+                        "text-xs uppercase py-3 font-bold block " +
+                        (window.location.href.indexOf("/proforma/ListProduitFournisseur") !== -1
+                            ? "text-lightBlue-500 hover:text-lightBlue-600"
+                            : "text-blueGray-700 hover:text-blueGray-500")
+                    }
+                    to="/proforma/ListProduitFournisseur"
+                >
+                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
+                  liste produit fournisseur
+                </Link>
+              </li>
+            </ul>
+          </>
+      )
+    }
+
+  }
   return (
     <>
       <nav className="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6">
@@ -74,105 +205,7 @@ export default function Sidebar() {
                 />
               </div>
             </form>
-
-            {/* Divider */}
-            {/* <hr className="my-4 md:min-w-full" /> */}
-            {/* Heading */}
-            {/* <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Admin Layout Pages
-            </h6> */}
-            {/* Navigation */}
-
-            {/* <ul className="md:flex-col md:min-w-full flex flex-col list-none">
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/dashboard") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/dashboard"
-                >
-                  <i
-                    className={
-                      "fas fa-tv mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/dashboard") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Dashboard
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/settings") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/settings"
-                >
-                  <i
-                    className={
-                      "fas fa-tools mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/settings") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Settings
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/tables") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/tables"
-                >
-                  <i
-                    className={
-                      "fas fa-table mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/tables") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Tables
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/admin/maps") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/admin/maps"
-                >
-                  <i
-                    className={
-                      "fas fa-map-marked mr-2 text-sm " +
-                      (window.location.href.indexOf("/admin/maps") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Maps
-                </Link>
-              </li>
-            </ul> */}
-
+{/*==============BESOINS===========*/}
             {/* Divider */}
             <hr className="my-4 md:min-w-full" />
             {/* Heading */}
@@ -219,260 +252,9 @@ export default function Sidebar() {
                 </Link>
               </li>
             </ul>
+  {/*==========FOURNISSEUR===========*/}
+            {menuFournisseur()}
 
-
-            {/* Divider */}
-            <hr className="my-4 md:min-w-full" />
-            {/* Heading */}
-            <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Fournisseurs & Produits
-            </h6>
-            {/* Navigation */}
-
-            <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/fournisseur/list") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/fournisseur/list"
-                >
-                  <i
-                    className={
-                      "fas fa-list  text-blueGray-400 mr-2 text-sm" +
-                      (window.location.href.indexOf("/fournisseur/list") !== -1
-                        ? "opacity-75"
-                        : "text-blueGray-300")
-                    }
-                  ></i>{" "}
-                  Liste des Fournisseurs
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/fournisseur/produits/list") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/fournisseur/produits/list"
-                >
-                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
-                  Liste des produits
-                </Link>
-              </li>
-              <li className="items-center">
-                <Link
-                  className={
-                    "text-xs uppercase py-3 font-bold block " +
-                    (window.location.href.indexOf("/fournisseur/add") !== -1
-                      ? "text-lightBlue-500 hover:text-lightBlue-600"
-                      : "text-blueGray-700 hover:text-blueGray-500")
-                  }
-                  to="/fournisseur/add"
-                >
-                  <i className="fas fa-list fa-beat text-blueGray-300 mr-2 text-sm"></i>{" "}
-                  Liste des pro forma
-                </Link>
-              </li>
-
-              {/*demande mail en proforma */}
-              <li className="items-center">
-                <Link
-                    className={
-                        "text-xs uppercase py-3 font-bold block " +
-                        (window.location.href.indexOf("/fournisseur/produits/list") !== -1
-                            ? "text-lightBlue-500 hover:text-lightBlue-600"
-                            : "text-blueGray-700 hover:text-blueGray-500")
-                    }
-                    to="/proforma"
-                >
-                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
-                  demande mail proforma
-                </Link>
-              </li>
-
-              {/*ajout exel en proforma */}
-              <li className="items-center">
-                <Link
-                    className={
-                        "text-xs uppercase py-3 font-bold block " +
-                        (window.location.href.indexOf("/fournisseur/produits/list") !== -1
-                            ? "text-lightBlue-500 hover:text-lightBlue-600"
-                            : "text-blueGray-700 hover:text-blueGray-500")
-                    }
-                    to="/proforma/AddExelProforma"
-                >
-                  <i className="fas fa-plus-circle text-blueGray-300 mr-2 text-sm"></i>{" "}
-                  ajouter un exel en proforma
-                </Link>
-              </li>
-            </ul>
-
-
-
-
-            {/* Divider */}
-            {/* <hr className="my-4 md:min-w-full" /> */}
-            {/* Heading */}
-            {/* <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Auth Layout Pages
-            </h6> */}
-            {/* Navigation */}
-
-            {/* <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  to="/auth/login"
-                >
-                  <i className="fas fa-fingerprint text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Login
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  to="/auth/register"
-                >
-                  <i className="fas fa-clipboard-list text-blueGray-300 mr-2 text-sm"></i>{" "}
-                  Register
-                </Link>
-              </li>
-            </ul> */}
-
-            {/* Divider */}
-            {/* <hr className="my-4 md:min-w-full" /> */}
-            {/* Heading */}
-            {/* <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              No Layout Pages
-            </h6> */}
-            {/* Navigation */}
-
-            {/* <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="items-center">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  to="/landing"
-                >
-                  <i className="fas fa-newspaper text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Landing Page
-                </Link>
-              </li>
-
-              <li className="items-center">
-                <Link
-                  className="text-blueGray-700 hover:text-blueGray-500 text-xs uppercase py-3 font-bold block"
-                  to="/profile"
-                >
-                  <i className="fas fa-user-circle text-blueGray-400 mr-2 text-sm"></i>{" "}
-                  Profile Page
-                </Link>
-              </li>
-            </ul> */}
-
-            {/* Divider */}
-            {/* <hr className="my-4 md:min-w-full" /> */}
-            {/* Heading */}
-            {/* <h6 className="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline">
-              Documentation
-            </h6> */}
-            {/* Navigation */}
-            {/* <ul className="md:flex-col md:min-w-full flex flex-col list-none md:mb-4">
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/react/colors/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fas fa-paint-brush mr-2 text-blueGray-300 text-base"></i>
-                  Styles
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/react/alerts/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-css3-alt mr-2 text-blueGray-300 text-base"></i>
-                  CSS Components
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/angular/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-angular mr-2 text-blueGray-300 text-base"></i>
-                  Angular
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/js/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-js-square mr-2 text-blueGray-300 text-base"></i>
-                  Javascript
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/nextjs/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-react mr-2 text-blueGray-300 text-base"></i>
-                  NextJS
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/react/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-react mr-2 text-blueGray-300 text-base"></i>
-                  React
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/svelte/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fas fa-link mr-2 text-blueGray-300 text-base"></i>
-                  Svelte
-                </a>
-              </li>
-
-              <li className="inline-flex">
-                <a
-                  href="https://www.creative-tim.com/learning-lab/tailwind/vue/overview/notus"
-                  target="_blank"
-                  className="text-blueGray-700 hover:text-blueGray-500 text-sm block mb-4 no-underline font-semibold"
-                >
-                  <i className="fab fa-vuejs mr-2 text-blueGray-300 text-base"></i>
-                  VueJS
-                </a>
-              </li>
-            </ul> */}
           </div>
         </div>
       </nav>
