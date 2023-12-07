@@ -19,10 +19,7 @@ const UserDropdown = () => {
 
   const history = useHistory();
   const handleDisconnect = () => {
-    // Remove user from local storage
     localStorage.removeItem("user");
-
-    // Redirect to the home page
     history.push("/");
   };
   return (

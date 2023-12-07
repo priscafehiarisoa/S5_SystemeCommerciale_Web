@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import backendConfig from "../../config";
+import axios from "axios";
+import {Fournisseur} from "../../layouts/Fournisseur";
+import {MyAlert} from "../../components/MyAlert";
 
 export default function Login() {
 
@@ -20,30 +24,37 @@ export default function Login() {
 
   const [user, setUser] = useState([]);
   const history = useHistory();
+  const link = `http://${backendConfig.host}:${backendConfig.port}`;
+  const[errors,setErrors]=useState({})
+  const [formdata,setFormdata]=useState({
+    email:"",
+    password:""
+  })
+  // const handleInputChange = (e) => {
+  //   const { name, value, type, checked } = e.target;
+  //   // Use the name of the input field to update the corresponding state
+  //   setUser((prevUser) => ({
+  //     ...prevUser,
+  //     [name]: value,
+  //   }));
+  // };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    // Use the name of the input field to update the corresponding state
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
-  };
-
-  const handleSignIn = () => {
-    const foundUser = listUsers.find(
-      (u) => u.email === user.email && u.password === user.password
-    );
-
-    if (foundUser) {
-      // Store the user information in local storage
-      localStorage.setItem('user', JSON.stringify(foundUser));
-
-      // Redirect to the desired page (e.g., '/besoin/list')
-      history.push('/besoin/list');
-    } else {
-      console.log('Invalid email or password');
+  const handleSignIn = async () => {
+   const response=await axios.post(link+"/login",formdata)
+    let foundUser={}
+    if(response.data.error){
+      console.log("erreur"+response.data.error)
+      setErrors({
+        erreur: response.data.error
+      })
     }
+    else{
+      foundUser=response.data;
+      console.log(JSON.stringify(foundUser))
+      localStorage.setItem('user', JSON.stringify(foundUser));
+      history.push('/besoin/list');
+    }
+
   }
 
   return (
@@ -58,30 +69,32 @@ export default function Login() {
                     Sign in with
                   </h6>
                 </div>
-                <div className="btn-wrapper text-center">
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img
-                      alt="..."
-                      className="w-5 mr-1"
-                      src={require("assets/img/github.svg").default}
-                    />
-                    Github
-                  </button>
-                  <button
-                    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"
-                    type="button"
-                  >
-                    <img
-                      alt="..."
-                      className="w-5 mr-1"
-                      src={require("assets/img/google.svg").default}
-                    />
-                    Google
-                  </button>
-                </div>
+                {/*<div className="btn-wrapper text-center">*/}
+                {/*  <button*/}
+                {/*    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"*/}
+                {/*    type="button"*/}
+                {/*  >*/}
+                {/*    <img*/}
+                {/*      alt="..."*/}
+                {/*      className="w-5 mr-1"*/}
+                {/*      src={require("assets/img/github.svg").default}*/}
+                {/*    />*/}
+                {/*    Github*/}
+                {/*  </button>*/}
+                {/*  <button*/}
+                {/*    className="bg-white active:bg-blueGray-50 text-blueGray-700 font-normal px-4 py-2 rounded outline-none focus:outline-none mr-1 mb-1 uppercase shadow hover:shadow-md inline-flex items-center font-bold text-xs ease-linear transition-all duration-150"*/}
+                {/*    type="button"*/}
+                {/*  >*/}
+                {/*    <img*/}
+                {/*      alt="..."*/}
+                {/*      className="w-5 mr-1"*/}
+                {/*      src={require("assets/img/google.svg").default}*/}
+                {/*    />*/}
+                {/*    Google*/}
+                {/*  </button>*/}
+                {/*</div>*/}
+
+                {errors.erreur && <MyAlert hidden={"hidden"} textErrors={errors.erreur} ></MyAlert>}
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
@@ -101,7 +114,7 @@ export default function Login() {
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Email"
                       name="email"
-                      onChange={handleInputChange}
+                      onChange={e=> setFormdata({...formdata, email: e.target.value})}
                     />
                   </div>
 
@@ -117,7 +130,7 @@ export default function Login() {
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       placeholder="Password"
                       name="password"
-                      onChange={handleInputChange}
+                      onChange={event => setFormdata({...formdata, password: event.target.value})}
                     />
                   </div>
                   <div>

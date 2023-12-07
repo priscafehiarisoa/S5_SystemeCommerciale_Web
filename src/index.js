@@ -18,6 +18,7 @@ import Index from "views/Index.js";
 import { Besoin } from "layouts/Besoin";
 import { Fournisseur } from "layouts/Fournisseur";
 import {ProformaLayout} from "./layouts/ProformaLayout";
+import {MagasinierLayout} from "./layouts/MagasinierLayout";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -31,6 +32,7 @@ ReactDOM.render(
       {/* add routes without layouts */}
       <Route path="/landing" exact component={Landing} />
       <Route path="/profile" exact component={Profile} />
+      <Route path="/magasinier" exact component={MagasinierLayout} />
       <Route path="/"  component={Auth} />
       {/* add redirect for first page */}
       <Redirect from="*" to="/auth/login" />
