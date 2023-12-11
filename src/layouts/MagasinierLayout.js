@@ -1,12 +1,10 @@
 import Sidebar from "../components/Sidebar/Sidebar";
 import AdminNavbar from "../components/Navbars/AdminNavbar";
 import HeaderStats from "../components/Headers/HeaderStats";
-import {Redirect, Route, Switch} from "react-router-dom";
-
-import FooterAdmin from "../components/Footers/FooterAdmin";
 import React from "react";
 import {MagasinierNavBar} from "../components/Navbars/MagasinierNavBar";
 import {IndexMagasinier} from "../views/magasinier/IndexMagasinier";
+import {Route, Switch} from "react-router-dom";
 
 export const MagasinierLayout=()=>{
     return(
